@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hello_World</string>
+    <string name="hello">hello</string>
+    <string name="courseButtonText">Courses</string>
+    <string name="newsButtonText">News</string>
+    <string name="eventsButtonText">Events</string>
+    <string name="seminarsButtonText">Seminars</string>
+    <string name="helloLabelText">Computer Science Auckland</string>
+    <string name="returnButtonText">Return</string>
+    <string name="rsstitle1"></string>
+</resources>
