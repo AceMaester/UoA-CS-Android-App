@@ -75,8 +75,20 @@ namespace CSac_android
 			// aapt resource value: 0x7f050007
 			public const int courseButton = 2131034119;
 			
+			// aapt resource value: 0x7f050002
+			public const int courseCode = 2131034114;
+			
+			// aapt resource value: 0x7f050004
+			public const int courseList = 2131034116;
+			
+			// aapt resource value: 0x7f050003
+			public const int courseSemester = 2131034115;
+			
+			// aapt resource value: 0x7f050000
+			public const int courseText = 2131034112;
+			
 			// aapt resource value: 0x7f050001
-			public const int courseList = 2131034113;
+			public const int courseTitle = 2131034113;
 			
 			// aapt resource value: 0x7f050011
 			public const int email = 2131034129;
@@ -87,17 +99,11 @@ namespace CSac_android
 			// aapt resource value: 0x7f05000f
 			public const int fullName = 2131034127;
 			
-			// aapt resource value: 0x7f050003
-			public const int headerImage = 2131034115;
-			
 			// aapt resource value: 0x7f050006
 			public const int homeImage = 2131034118;
 			
 			// aapt resource value: 0x7f050012
 			public const int homePageButton = 2131034130;
-			
-			// aapt resource value: 0x7f050004
-			public const int logoImage = 2131034116;
 			
 			// aapt resource value: 0x7f050008
 			public const int newsButton = 2131034120;
@@ -113,12 +119,6 @@ namespace CSac_android
 			
 			// aapt resource value: 0x7f050010
 			public const int phoneNo = 2131034128;
-			
-			// aapt resource value: 0x7f050002
-			public const int relativeLayout1 = 2131034114;
-			
-			// aapt resource value: 0x7f050000
-			public const int returnButton = 2131034112;
 			
 			// aapt resource value: 0x7f050013
 			public const int rssList = 2131034131;
@@ -152,22 +152,25 @@ namespace CSac_android
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int Courses = 2130903040;
+			public const int CourseListItem = 2130903040;
 			
 			// aapt resource value: 0x7f030001
-			public const int Main = 2130903041;
+			public const int Courses = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int People = 2130903042;
+			public const int Main = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int PeopleListItem = 2130903043;
+			public const int People = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int RSS = 2130903044;
+			public const int PeopleListItem = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int RSSListItem = 2130903045;
+			public const int RSS = 2130903045;
+			
+			// aapt resource value: 0x7f030006
+			public const int RSSListItem = 2130903046;
 			
 			static Layout()
 			{

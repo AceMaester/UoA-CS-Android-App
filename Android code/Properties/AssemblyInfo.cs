@@ -12,6 +12,12 @@ using Android.App;
 [assembly: AssemblyCopyright ("Admin")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
+
+#if DEBUG
+[assembly: Application(Debuggable = true)]
+#else
+[assembly: Application(Debuggable = false)]
+#endif
 // The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
@@ -20,4 +26,6 @@ using Android.App;
 // if desired. See the Mono documentation for more information about signing.
 //[assembly: AssemblyDelaySign(false)]
 //[assembly: AssemblyKeyFile("")]
+
+
 

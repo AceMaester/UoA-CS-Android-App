@@ -27,8 +27,7 @@ namespace CSac_android
 		private Button seminarsButton;
 		private Button peopleButton;
 		private ImageView aView;
-		private ImageView headerView;
-		private ImageView logoView;
+
 
 		protected override void OnCreate (Bundle bundle)
 		{
@@ -51,7 +50,7 @@ namespace CSac_android
 			aView.SetAdjustViewBounds (true);
 
 
-			headerView = (ImageView)FindViewById (Resource.Id.headerImage); //Cloud image from CS website
+			/*headerView = (ImageView)FindViewById (Resource.Id.headerImage); //Cloud image from CS website
 
 			MemoryStream headerImagestream = new MemoryStream (new WebClient ().DownloadData ("http://www.cs.auckland.ac.nz/global/images/clouds.jpg"));
 			var headerBitmap = Android.Graphics.BitmapFactory.DecodeStream ((Stream)headerImagestream);
@@ -63,7 +62,7 @@ namespace CSac_android
 			MemoryStream logoImagestream = new MemoryStream (new WebClient ().DownloadData ("http://www.cs.auckland.ac.nz/global/images/logo.png"));
 			var logoBitmap = Android.Graphics.BitmapFactory.DecodeStream ((Stream)logoImagestream);
 			logoView.SetImageBitmap (logoBitmap);
-			logoView.SetAdjustViewBounds (true);
+			logoView.SetAdjustViewBounds (true); */
 
 
 

@@ -29,7 +29,7 @@ namespace CSac_android
 		public static string[] links;
 		public static string[] descriptions;
 		public static string[] pubDates;
-		private Button returnButton;
+
 		private ListView rssList;
 		private const int cancelDialog = 0;
 
@@ -51,32 +51,17 @@ namespace CSac_android
 				SetTitle (Resource.String.seminarsButtonText);
 			}
 
-
-
-
 			GetRss(feedType); //consumes rss feeds
 
 			rssList = (ListView)FindViewById (Resource.Id.rssList);
-			rssList.Adapter = new CourseListAdapter (this, titles);
+			rssList.Adapter = new RssListAdapter (this, titles);
 
 
-			if (rssList.Count == 0) {
+			if (rssList.Count == 0) { //display dialog if no rss items available
 
-				Console.WriteLine (rssList.Count);
 				ShowDialog (cancelDialog);
 
 			}
-
-
-			returnButton = (Button)FindViewById (Resource.Id.returnButton); //button that returns to main screen
-			returnButton.Click += (Sender, e) => {
-				var main = new Intent(this, typeof(MainActivity));
-				StartActivity(main);
-			};
-
-
-
-
 
 		}
 
@@ -106,7 +91,7 @@ namespace CSac_android
 
 		String url;
 
-		if (feed == "Events")
+		if (feed == "Events") //url depends on feed type
 		{
 
 			url = "http://www.cs.auckland.ac.nz/uoa/home/template/events_feed.rss?category=other_events";
@@ -173,17 +158,14 @@ namespace CSac_android
 				Console.WriteLine (description [i].InnerText);
 			}*/
 
-
-
-			
-	}
+		}
 	}
 
-	 class CourseListAdapter : BaseAdapter<string> {
+	 class RssListAdapter : BaseAdapter<string> { //adapter for rssLsit
 
 		string[] values;
 		Activity context;
-		public CourseListAdapter(Activity context, string[] values)
+		public RssListAdapter(Activity context, string[] values)
 			: base()
 		{
 			this.context = context;
@@ -213,10 +195,10 @@ namespace CSac_android
 			}
 
 			TextView link = view.FindViewById<TextView> (Resource.Id.rsstitle);
-			String linkText = "<a href=\"" + RSSActivity.links [position] + "\">" + values [position] + "</a> ";
+			String linkText = "<a href=\"" + RSSActivity.links [position] + "\">" + values [position] + "</a> "; 
 
 			link.TextFormatted = Html.FromHtml(linkText);
-			link.MovementMethod = LinkMovementMethod.Instance;
+			link.MovementMethod = LinkMovementMethod.Instance; //hyperlink rss title
 
 			view.FindViewById<TextView>(Resource.Id.rssdescription).Text = RSSActivity.descriptions [position];
 			view.FindViewById<TextView>(Resource.Id.rsspubdate).Text = RSSActivity.pubDates [position];

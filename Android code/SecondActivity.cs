@@ -22,36 +22,26 @@ namespace CSac_android
 	{
 
 		private ListView courseList;
-		private Button returnButton;
-
-
+		public static string[] titles;
+		public static string[] codes;
+		public static string[] semesters;
 
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
 			SetContentView (Resource.Layout.Courses);
-			string[] titles = GetCourses();
+			GetCourses();
 
 
 			courseList = (ListView)FindViewById (Resource.Id.courseList);
 
-			courseList.Adapter = new ArrayAdapter<String>(this, Android.Resource.Layout.SimpleListItem1, titles);
+			courseList.Adapter = new CourseListAdapter(this, titles);
 
-
-			returnButton = (Button)FindViewById (Resource.Id.returnButton); //button that returns to main screen
-
-			returnButton.Click += (Sender, e) => {
-				var main = new Intent(this, typeof(MainActivity));
-
-
-				StartActivity(main);
-
-			};
 
 		}
 
-		public string[] GetCourses(){ //returns list of strings containing details for each course on UoA CS website
+		public void GetCourses(){ //returns list of strings containing details for each course on UoA CS website
 			Console.WriteLine ("--- Retriveing Courses ---");
 			XmlDocument coursesxml = new XmlDocument ();
 			coursesxml.Load ("http://redsox.tcs.auckland.ac.nz/CSS/CSService.svc/courses"); //import courses feed
@@ -61,17 +51,63 @@ namespace CSac_android
 			XmlNodeList semesterField = coursesxml.GetElementsByTagName ("semesterField");
 			XmlNodeList titleField = coursesxml.GetElementsByTagName ("titleField");
 
-			string[] s = new string[codeField.Count];//assuming every tag has same amount of fields
+			 titles = new string[codeField.Count];
+			 codes = new string[codeField.Count];
+			 semesters = new string[codeField.Count];//assuming every tag has same amount of fields
 
 			for (int i = 0; i < codeField.Count; i++) {
-				s [i] = codeField [i].InnerText + " \n" + titleField[i].InnerText + " \n" + semesterField[i].InnerText; //dat string
+				//s [i] = codeField [i].InnerText + " \n" + titleField[i].InnerText + " \n" + semesterField[i].InnerText; //dat string
+				titles [i] = titleField [i].InnerText;
+				codes [i] = codeField [i].InnerText;
+				semesters [i] = semesterField [i].InnerText;
+			
 			}
 
-			return s;
 
 		}
 
-	}		
+	}
+
+
+	class CourseListAdapter : BaseAdapter<string> {
+
+		string[] values;
+		Activity context;
+		public CourseListAdapter(Activity context, string[] values)
+			: base()
+		{
+			this.context = context;
+			this.values = values;
+
+		}
+
+		public override long GetItemId(int position)
+		{
+			return position;
+		}
+		public override string this[int position]
+		{
+			get { return values[position]; }
+		}
+		public override int Count
+		{
+			get { return values.Length; }
+		}
+		public override View GetView(int position, View convertView, ViewGroup parent)
+		{
+
+			View view = convertView;
+			if (view == null) { // no view to re-use, create new
+				view = context.LayoutInflater.Inflate (Resource.Layout.CourseListItem, null);
+
+			}
+
+			view.FindViewById<TextView> (Resource.Id.courseTitle).Text = Courses.titles [position];
+			view.FindViewById<TextView> (Resource.Id.courseCode).Text = Courses.codes [position];
+			view.FindViewById<TextView>(Resource.Id.courseSemester).Text = Courses.semesters [position];
+			return view;
+		}
+	}
 				
 }
 

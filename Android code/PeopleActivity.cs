@@ -15,6 +15,7 @@ using Android.Text;
 using Android.Text.Method;
 using System.Resources;
 using Android.Text.Util;
+using System.Threading;
 
 namespace CSac_android
 {
@@ -22,22 +23,16 @@ namespace CSac_android
 	public class PeopleActivity : Activity
 	{
 
-		private Button returnButton;
+
 		private ListView peopleList;
-		public static VCard[] v; //array of V-cards
+		public static VCard[] v; 
+		public static string[] upiList;//array of V-cards
 
 
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 			SetContentView (Resource.Layout.People);
-
-			returnButton = (Button)FindViewById (Resource.Id.returnButton); //button that returns to main screen
-			returnButton.Click += (Sender, e) => {
-				var main = new Intent (this, typeof(MainActivity));
-				StartActivity (main);
-			};
-
 
 		}
 
@@ -47,48 +42,56 @@ namespace CSac_android
 			base.OnStart ();
 			peopleList = (ListView)FindViewById (Resource.Id.peopleList);
 
-			//peopleList.Adapter = new PeopleListAdapter (this, null);
-
 			if (v == null) {
-				GetPeople ();
+
+				GetUpis ();
+				v = new VCard[upiList.Length];
+
+				for (int i = 0; i < upiList.Length; i++) {
+
+					v [i] = new VCard ("", upiList [i], "no homepage", "", "no picture");
+
+
+				}
+
+				ThreadPool.QueueUserWorkItem (o => GetPeople ());
 			}
 
-			string[] names = new string[v.Length];
-			for (int i = 0; i < v.Length; i++) {
-				names [i] = v [i].fullname;
+			Thread.Sleep (2000);
+
+			peopleList.Adapter = new PeopleListAdapter (this, upiList);
+
+
+		}
+
+		private void GetUpis(){ 
+
+			XmlDocument upisxml = new XmlDocument ();
+			upisxml.Load ("http://redsox.tcs.auckland.ac.nz/CSS/CSService.svc/people");
+
+
+
+			XmlNodeList uPIField = upisxml.GetElementsByTagName ("uPIField");
+
+			upiList = new string[uPIField.Count];
+
+			for (int i = 0; i < uPIField.Count; i++) 
+			{
+				upiList[i] = uPIField[i].InnerText;
 			}
-
-
-			peopleList = (ListView)FindViewById (Resource.Id.peopleList);
-
-			peopleList.Adapter = new PeopleListAdapter (this, names);
-
-
-
 
 		}
 
 		public void GetPeople() //consumes url to produce an array of v-cards for each person
 		{
-			Console.WriteLine ("--- Retriveing Upis ---");
+
 			XmlDocument upisxml = new XmlDocument ();
 			upisxml.Load ("http://redsox.tcs.auckland.ac.nz/CSS/CSService.svc/people");
 
-			Console.WriteLine ("--- Result ---");
+
 			XmlNodeList uPIField = upisxml.GetElementsByTagName ("uPIField");
 
-			//Console.WriteLine ("UPIs: ");
-
-			/* for (int i = 0; i < uPIField.Count; i++) //debug print all upi's
-            {
-                Console.WriteLine(uPIField[i].InnerText);
-            }*/
-
 			MemoryStream vcardstream;
-			v = new VCard[uPIField.Count]; //array of v-cards
-
-
-
 
 				for (int i = 0; i < uPIField.Count; i++) {
 					vcardstream = new MemoryStream (new WebClient ().DownloadData (" http://www.cs.auckland.ac.nz/our_staff/vcard.php?upi=" + uPIField [i].InnerText));
@@ -113,7 +116,7 @@ namespace CSac_android
 						v [i] = new VCard (vcardfields [3], vcardfields [6], vcardfields [11] + ":" + vcardfields [12], vcardfields [9], vcardfields [13]); //index 11 + 12 due to : in http://
 					}
 
-					v [i].ToString (); //debug, prints all v-cards
+					//v [i].ToDebugString (); //debug, prints all v-cards
 					
 				}
 
@@ -155,47 +158,51 @@ namespace CSac_android
 
 			}
 
-			if (PeopleActivity.v [position].picture == null) { //if perosn has no image display default image
 
 
-				view.FindViewById<ImageView> (Resource.Id.personPic).SetImageResource (Resource.Drawable.blank_person);
-				view.FindViewById<ImageView> (Resource.Id.personPic).SetAdjustViewBounds (true);
-			} else { //displays person's image
+				if (PeopleActivity.v [position].picture == null) { //if perosn has no image display default image
 
-				view.FindViewById<ImageView> (Resource.Id.personPic).SetImageBitmap (PeopleActivity.v [position].picture);
-				view.FindViewById<ImageView> (Resource.Id.personPic).SetAdjustViewBounds (true);
-			}
+
+					view.FindViewById<ImageView> (Resource.Id.personPic).SetImageResource (Resource.Drawable.blank_person);
+					view.FindViewById<ImageView> (Resource.Id.personPic).SetAdjustViewBounds (true);
+				} else { //displays person's image
+
+					view.FindViewById<ImageView> (Resource.Id.personPic).SetImageBitmap (PeopleActivity.v [position].picture);
+					view.FindViewById<ImageView> (Resource.Id.personPic).SetAdjustViewBounds (true);
+				}
 
 				string homepage = PeopleActivity.v [position].homepage;
 				
 
-			if (homepage != "no homepage") { //if person has a homepage make button that links to their homepage
+				if (homepage != "no homepage") { //if person has a homepage make button that links to their homepage
 
-				view.FindViewById<Button> (Resource.Id.homePageButton).Enabled = true;
-				view.FindViewById<Button> (Resource.Id.homePageButton).Visibility = ViewStates.Visible;
-				Button b = (Button)view.FindViewById (Resource.Id.homePageButton);
-				if (b != null) {
-					b.Click += (Sender, e) => {
+					view.FindViewById<Button> (Resource.Id.homePageButton).Enabled = true;
+					view.FindViewById<Button> (Resource.Id.homePageButton).Visibility = ViewStates.Visible;
+					Button b = (Button)view.FindViewById (Resource.Id.homePageButton);
+					
+					if (b != null) {
+						b.Click += (Sender, e) => {
+							var main = Android.Content.Intent.ParseUri (homepage, IntentUriType.None);
+							context.StartActivity (main);
+						};}
 
 
-						var main = Android.Content.Intent.ParseUri(homepage, IntentUriType.None);
-						//Console.WriteLine(homepage);
-						context.StartActivity (main);
-					};
+				} else {
+					view.FindViewById<Button> (Resource.Id.homePageButton).Enabled = false;
+					view.FindViewById<Button> (Resource.Id.homePageButton).Visibility = ViewStates.Gone;
 				}
 
-			} else {
-				view.FindViewById<Button> (Resource.Id.homePageButton).Enabled = false;
-				view.FindViewById<Button> (Resource.Id.homePageButton).Visibility = ViewStates.Gone;
-			}
+
+
+				Linkify.AddLinks (view.FindViewById<TextView> (Resource.Id.phoneNo), MatchOptions.PhoneNumbers);
+				Linkify.AddLinks (view.FindViewById<TextView> (Resource.Id.email), MatchOptions.EmailAddresses);
+				view.FindViewById<TextView> (Resource.Id.phoneNo).Text = PeopleActivity.v [position].phoneno;
+				view.FindViewById<TextView> (Resource.Id.email).Text = PeopleActivity.v [position].email;
+			view.FindViewById<TextView> (Resource.Id.fullName).Text = PeopleActivity.v [position].fullname; //persons name
 
 
 
-			Linkify.AddLinks (view.FindViewById<TextView> (Resource.Id.phoneNo), MatchOptions.PhoneNumbers);
-			Linkify.AddLinks (view.FindViewById<TextView> (Resource.Id.email), MatchOptions.EmailAddresses);
-			view.FindViewById<TextView> (Resource.Id.phoneNo).Text = PeopleActivity.v [position].phoneno;
-			view.FindViewById<TextView> (Resource.Id.email).Text = PeopleActivity.v [position].email;
-			view.FindViewById<TextView> (Resource.Id.fullName).Text = values [position]; //persons name
+
 			return view;
 		}
 	}

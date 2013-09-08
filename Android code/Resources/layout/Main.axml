@@ -4,29 +4,6 @@
     android:background="#fff4f4f9"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <RelativeLayout
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="fill_parent"
-        android:layout_height="34.7dp"
-        android:id="@+id/relativeLayout1"
-        android:layout_marginBottom="0.0dp">
-        <ImageView
-            android:src="@android:drawable/ic_menu_gallery"
-            android:id="@+id/headerImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY" />
-        <ImageView
-            android:src="@android:drawable/ic_menu_gallery"
-            android:id="@+id/logoImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/headerImage"
-            android:layout_alignBottom="@+id/headerImage"
-            android:layout_margin="2dp"
-            android:gravity="left" />
-    </RelativeLayout>
     <TextView
         android:text="Department of Computer Science"
         android:textAppearance="?android:attr/textAppearanceMedium"

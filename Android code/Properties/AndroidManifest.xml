@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="Hello_World.Hello_World">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.1" package="Hello_World.Hello_World">
 	<uses-sdk />
-	<application android:label="Hello_World" android:icon="@drawable/au_icon" ></application>
+	<application android:label="Hello_World" android:icon="@drawable/au_icon"></application>
+	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>

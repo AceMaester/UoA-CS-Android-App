@@ -45,7 +45,7 @@ namespace CSac_android
 			phoneno = sb.ToString();
 
 			
-			if (pic.Substring (0, 3) == "/9j") {
+			if (pic.Substring (0, 3) == "/9j" || pic.Substring (0, 3) == "iVB") {
 
 				byte[] byteBuffer = Convert.FromBase64String (pic);
 				MemoryStream memoryStream = new MemoryStream (byteBuffer);
@@ -63,7 +63,7 @@ namespace CSac_android
 		}
 
 
-		public void ToString()
+		public void ToDebugString()
 		{
 
 			Console.WriteLine("phoneno: " + phoneno);
@@ -73,12 +73,7 @@ namespace CSac_android
 			//Console.WriteLine("pic: " + picture.Substring(0, 5));
 		}
 
-		public string WriteToString()
-		{
 
-			return phoneno + "xoxox" + fullname + "xoxox" + homepage + "xoxox" + email + "xoxox" + picString + "xoxox";
-
-		}
 	}
 	
 }
